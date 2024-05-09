@@ -7,7 +7,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <style>
     body {
-        background-color: #121212; 
+        background-color: #121212;
         color: #e0e0e0;
         font-family: Arial, sans-serif;
     }
@@ -40,21 +40,32 @@
 </style>
 <script>
 $(document).ready(function() {
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    }
+
+    function formatPrice(priceString) {
+        // Parse the price and format it to two decimal places
+        const price = parseFloat(priceString.replace(',', ''));
+        return price.toFixed(2) + ' USD';
+    }
+
     function fetchPrices() {
         $.get("/get_prices", function(data) {
             $("#prices").html('');
             data.forEach((price, index) => {
-                $("#prices").append(`<li id="price-${index}">Price: <a>${price.price}</a> - Timestamp: <a>${price.timestamp}</a> - <button onclick="verifyPrice('${price.price}', '${price.signature}', ${index})">Verify</button></li>`);
+                const formattedTime = formatDate(price.timestamp);
+                const formattedPrice = formatPrice(price.price);
+                $("#prices").append(`<li id="price-${index}">Price: <a>${formattedPrice}</a> - Timestamp: <a>${formattedTime}</a> - <button onclick="verifyPrice('${price.price}', '${price.signature}', ${index})">Verify</button></li>`);
             });
         });
     }
 
-    // fetch on load
-    fetchPrices();
+    fetchPrices();  // Call fetchPrices when page loads
 
-    // bind the fetchPrices function to the button as well
     $("#fetchPrices").click(function () {
-        fetchPrices();
+        fetchPrices();  // Bind the fetchPrices function to the Fetch Prices button as well
     });
 
     window.verifyPrice = function (price, signature, index) {
