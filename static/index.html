@@ -34,6 +34,9 @@
         background-color: #222;
         border-radius: 5px;
     }
+    a {
+        color: rgb(255, 233, 110);
+    }
 </style>
 <script>
 $(document).ready(function() {
@@ -41,7 +44,7 @@ $(document).ready(function() {
         $.get("/get_prices", function(data) {
             $("#prices").html('');
             data.forEach(price => {
-                $("#prices").append(`<li>Price: ${price.price}, Timestamp: ${price.timestamp}, Verified: <button onclick="verifyPrice('${price.price}', '${price.signature}')">Verify</button></li>`);
+                $("#prices").append(`<li>Price: <a>${price.price}</a> - Timestamp: <a>${price.timestamp}</a> - <button onclick="verifyPrice('${price.price}', '${price.signature}')">Verify</button></li>`);
             });
         });
     });
