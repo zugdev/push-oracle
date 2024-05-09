@@ -8,7 +8,7 @@ from cryptography.hazmat.primitives import serialization
 
 app = Flask(__name__)
 
-# generate keys (in prod I would save these and reuse them)
+# generate keys (replicate notarizing)
 private_key = rsa.generate_private_key(
     public_exponent=65537,
     key_size=2048,
@@ -36,10 +36,8 @@ def submit_price():
         # encode signature to base64 for JSON serialization
         encoded_signature = b64encode(signature).decode('utf-8')
         
-        # Get the current timestamp
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now().isoformat()
 
-        # store the price, its encoded signature, and the timestamp
         bitcoin_prices.append({'price': bitcoin_price, 'signature': encoded_signature, 'timestamp': timestamp})
         
         return jsonify({"message": "Price received and signed", "current_prices": bitcoin_prices}), 200
@@ -51,13 +49,11 @@ def verify_price():
     data = request.get_json()
     bitcoin_price = data.get('price')
     encoded_signature = data.get('signature')
-    timestamp = data.get('timestamp')  # Assuming the timestamp is sent along with the request
+    timestamp = data.get('timestamp')  
     
     if bitcoin_price and encoded_signature:
-        # Decode the base64 signature
         signature = b64decode(encoded_signature)
         
-        # Verify the signature (without the timestamp for simplicity here)
         try:
             public_key.verify(
                 signature,
