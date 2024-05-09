@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitcoin Price Checker</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("#fetchPrices").click(function() {
+        $.get("/get_prices", function(data) {
+            $("#prices").html('');
+            data.forEach(price => {
+                $("#prices").append(`<li>Price: ${price.price}, Verified: <button onclick="verifyPrice('${price.price}', '${price.signature}')">Verify</button></li>`);
+            });
+        });
+    });
+
+    window.verifyPrice = function(price, signature) {
+        $.post("/verify_price", JSON.stringify({price: price, signature: signature}), function(response) {
+            alert("Verification: " + response.message);
+        }, "json").fail(function(response) {
+            alert("Verification Failed: " + response.responseJSON.error);
+        });
+    };
+});
+</script>
+</head>
+<body>
+<h1>Bitcoin Price Checker</h1>
+<button id="fetchPrices">Fetch Prices</button>
+<ul id="prices"></ul>
+</body>
+</html>
