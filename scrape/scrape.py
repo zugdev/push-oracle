@@ -16,7 +16,6 @@ def fetch_bitcoin_price():
         # accessing the 'rate' field under 'USD' in 'bpi'
         bitcoin_price = data['bpi']['USD']['rate']
         
-        print(f"Current Bitcoin price (USD): {bitcoin_price}")
         return bitcoin_price
     
     except requests.RequestException as e:
