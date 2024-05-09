@@ -17,12 +17,20 @@ $(document).ready(function() {
     });
 
     window.verifyPrice = function(price, signature) {
-        $.post("/verify_price", JSON.stringify({price: price, signature: signature}), function(response) {
-            alert("Verification: " + response.message);
-        }, "json").fail(function(response) {
-            alert("Verification Failed: " + response.responseJSON.error);
+        $.ajax({
+            url: "/verify_price",
+            type: "POST",
+            contentType: "application/json", // Explicitly setting the Content-Type
+            data: JSON.stringify({ price: price, signature: signature }),
+            success: function (response) {
+                alert("Verification: " + response.message);
+            },
+            error: function (response) {
+                alert("Verification Failed: " + response.responseJSON.error);
+            }
         });
     };
+
 });
 </script>
 </head>
