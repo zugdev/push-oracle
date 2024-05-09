@@ -43,20 +43,21 @@ $(document).ready(function() {
     $("#fetchPrices").click(function() {
         $.get("/get_prices", function(data) {
             $("#prices").html('');
-            data.forEach(price => {
-                $("#prices").append(`<li>Price: <a>${price.price}</a> - Timestamp: <a>${price.timestamp}</a> - <button onclick="verifyPrice('${price.price}', '${price.signature}')">Verify</button></li>`);
+            data.forEach((price, index) => {
+                $("#prices").append(`<li id="price-${index}">Price: <a>${price.price}</a> - Timestamp: <a>${price.timestamp}</a> - <button onclick="verifyPrice('${price.price}', '${price.signature}', ${index})">Verify</button></li>`);
             });
         });
     });
 
-    window.verifyPrice = function(price, signature) {
+    window.verifyPrice = function (price, signature, index) {
         $.ajax({
             url: "/verify_price",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({ price: price, signature: signature }),
             success: function (response) {
-                alert("Verification: " + response.message);
+                alert(`Verification: ${response.message}\nSignature: ${signature}`);
+                $(`#price-${index} button`).text('Verified').prop('disabled', true);
             },
             error: function (response) {
                 alert("Verification Failed: " + response.responseJSON.error);
