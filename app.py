@@ -42,6 +42,33 @@ def submit_price():
     else:
         return jsonify({"error": "No price provided"}), 400
 
+@app.route('/verify_price', methods=['POST'])
+def verify_price():
+    data = request.get_json()
+    bitcoin_price = data.get('price')
+    encoded_signature = data.get('signature')
+    
+    if bitcoin_price and encoded_signature:
+        # Decode the base64 signature
+        signature = b64decode(encoded_signature)
+        
+        # Verify the signature
+        try:
+            public_key.verify(
+                signature,
+                bitcoin_price.encode(),
+                padding.PSS(
+                    mgf=padding.MGF1(hashes.SHA256()),
+                    salt_length=padding.PSS.MAX_LENGTH
+                ),
+                hashes.SHA256()
+            )
+            return jsonify({"message": "Signature verified"}), 200
+        except Exception as e:
+            return jsonify({"error": "Verification failed", "details": str(e)}), 400
+    else:
+        return jsonify({"error": "No price or signature provided"}), 400
+
 @app.route('/get_prices', methods=['GET'])
 def get_prices():
     return jsonify(bitcoin_prices), 200
