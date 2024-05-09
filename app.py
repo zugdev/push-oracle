@@ -1,5 +1,6 @@
 from base64 import b64encode, b64decode
 import requests
+from datetime import datetime
 from flask import Flask, request, jsonify
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
@@ -34,9 +35,12 @@ def submit_price():
         
         # encode signature to base64 for JSON serialization
         encoded_signature = b64encode(signature).decode('utf-8')
+        
+        # Get the current timestamp
+        timestamp = datetime.utcnow().isoformat()
 
-        # store the price and its encoded signature
-        bitcoin_prices.append({'price': bitcoin_price, 'signature': encoded_signature})
+        # store the price, its encoded signature, and the timestamp
+        bitcoin_prices.append({'price': bitcoin_price, 'signature': encoded_signature, 'timestamp': timestamp})
         
         return jsonify({"message": "Price received and signed", "current_prices": bitcoin_prices}), 200
     else:
@@ -47,12 +51,13 @@ def verify_price():
     data = request.get_json()
     bitcoin_price = data.get('price')
     encoded_signature = data.get('signature')
+    timestamp = data.get('timestamp')  # Assuming the timestamp is sent along with the request
     
     if bitcoin_price and encoded_signature:
         # Decode the base64 signature
         signature = b64decode(encoded_signature)
         
-        # Verify the signature
+        # Verify the signature (without the timestamp for simplicity here)
         try:
             public_key.verify(
                 signature,
@@ -63,9 +68,9 @@ def verify_price():
                 ),
                 hashes.SHA256()
             )
-            return jsonify({"message": "Signature verified"}), 200
+            return jsonify({"message": "Signature verified", "timestamp": timestamp}), 200
         except Exception as e:
-            return jsonify({"error": "Verification failed", "details": str(e)}), 400
+            return jsonify({"error": "Verification failed", "details": str(e), "timestamp": timestamp}), 400
     else:
         return jsonify({"error": "No price or signature provided"}), 400
 

@@ -7,11 +7,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <style>
     body {
-        background-color: #121212;
-        color: #e0e0e0;
+        background-color: #121212; /* Dark background */
+        color: #e0e0e0; /* Light text */
         font-family: Arial, sans-serif;
     }
-
     button {
         background-color: #333;
         color: #fff;
@@ -22,16 +21,13 @@
         cursor: pointer;
         transition: background-color 0.3s;
     }
-
     button:hover {
         background-color: #555;
     }
-
     ul {
         list-style-type: none;
         padding: 0;
     }
-
     li {
         margin: 8px 0;
         padding: 8px;
@@ -45,7 +41,7 @@ $(document).ready(function() {
         $.get("/get_prices", function(data) {
             $("#prices").html('');
             data.forEach(price => {
-                $("#prices").append(`<li>Price: ${price.price}, Verified: <button onclick="verifyPrice('${price.price}', '${price.signature}')">Verify</button></li>`);
+                $("#prices").append(`<li>Price: ${price.price}, Timestamp: ${price.timestamp}, Verified: <button onclick="verifyPrice('${price.price}', '${price.signature}')">Verify</button></li>`);
             });
         });
     });
