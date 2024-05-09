@@ -6,17 +6,15 @@ import {PriceFeed} from "../src/PriceFeed.sol";
 
 contract DeployPriceFeed is Script {
     function run() external {
-        address owner = vm.envAddress("OWNER_ADDRESS");
-        address admin = vm.envAddress("ADMIN_ADDRESS");
+        address owner = vm.addr(1);
+        address admin = vm.addr(1);
 
         vm.startBroadcast();
 
-        // Deploy the PriceFeed contract
         PriceFeed priceFeed = new PriceFeed(owner, admin);
 
         vm.stopBroadcast();
 
-        // Log the deployed contract address
         console.log("PriceFeed deployed at:", address(priceFeed));
     }
 }

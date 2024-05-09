@@ -1,0 +1,1 @@
+forge script script/PriceFeed.s.sol:DeployPriceFeed --rpc-url http://localhost:8545 --broadcast
