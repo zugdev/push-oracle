@@ -1,23 +1,23 @@
 # Decentralized Push Model Oracle System
 
-A complete decentralized push model oracle system, where data is sourced externally by scraping, notarized through API, and then pushed onto the blockchain, making it accessible for smart contracts and decentralized applications.
+This project implements a complete decentralized push model oracle system, where data is sourced externally by scraping, notarized through a private API, and then pushed onto the blockchain. This makes it accessible for smart contracts and decentralized applications.
 
-Scrapes from open web endpoints, notarizes it through a private API, stores it on DB for validation and submits it to chain. Data is then available from price feed contracts.
+The system scrapes from open web endpoints, notarizes the data through a secure backend, stores it in a database for validation, and submits it to the blockchain. Data is then available through price feed contracts.
 
 ## System Components
 
-- **Scraping**: Price scraping.
-- **Contracts**: Handles the storage and retrieval of submitted prices along with role accessed contribution.
-- **Backend (Flask API)**: Manages data fetching, notarization, and interaction with the smart contract.
+- **Scraping**: Automated scraping of price data.
+- **Contracts**: Smart contracts handle the storage and retrieval of submitted prices, along with role-based access for contributions.
+- **Backend (Flask API)**: Manages data fetching, notarization, and interactions with the smart contract.
 - **Frontend**: Provides a user-friendly dashboard for viewing prices and verifying signatures.
-- **Notarization**: Ensures data integrity by signing data before submission to the blockchain.
+- **Notarization**: Ensures data integrity by cryptographically signing data before submission to the blockchain.
 
 ## Prerequisites
 
-- Python 3.8+
+- Python 3.8 or higher
 - Flask
-- Foundry, Forge, Anvil
-- requirements.txt
+- Ethereum development tools: Foundry (Forge, Anvil)
+- Install Python dependencies from `requirements.txt`
 
 ## Setup and Installation
 
@@ -29,12 +29,12 @@ Scrapes from open web endpoints, notarizes it through a private API, stores it o
 
 2. **Install Dependencies**
 
-   - Python dependencies:
+   - Install Python dependencies:
      ```bash
      pip install -r requirements.txt
      ```
 
-   - Ethereum tools (Foundry):
+   - Install Ethereum tools (Foundry):
      ```bash
      curl -L https://foundry.paradigm.xyz | bash
      foundryup
@@ -68,7 +68,7 @@ Scrapes from open web endpoints, notarizes it through a private API, stores it o
    To view the submitted prices directly from the blockchain:
    ```bash
    cd contracts
-   cast call --rpc-url http://localhost:8545 0x34A1D3fff3958843C43aD80F30b94c316 "getPrice(string)" BTC --legacy
+   cast call --rpc-url http://localhost:8545 0x34A1D3fff3958843C43aD80F30b94c510645C316 "getPrice(string)" BTC --legacy
    cd ..
    ```
 
