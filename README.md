@@ -23,8 +23,8 @@ The system scrapes from open web endpoints, notarizes the data through a secure 
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/zugdev/openlayer
-   cd openlayer
+   git clone https://github.com/zugdev/push-oracle
+   cd push-oracle
    ```
 
 2. **Install Dependencies**
